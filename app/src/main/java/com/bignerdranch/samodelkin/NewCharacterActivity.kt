@@ -1,21 +1,41 @@
 package com.bignerdranch.samodelkin
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.TextView
+import com.bignerdranch.samodelkin.databinding.ActivityNewCharacterBinding
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import androidx.viewbinding.ViewBinding
 
+private lateinit var binding: ActivityNewCharacterBinding
 class NewCharacterActivity : AppCompatActivity() {
     private var characterData = CharacterGenerator.generate()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_character)
-        val nameTextView = findViewById<TextView>(R.id.nameTextView)
-        val raceTextView = findViewById<TextView>(R.id.raceTextView)
-        val dexterityTextView = findViewById<TextView>(R.id.dexterityTextView)
-        val wisdomTextView = findViewById<TextView>(R.id.wisdomTextView)
-        val strengthTextView = findViewById<TextView>(R.id.strengthTextView)
-        val generateButton = findViewById<Button>(R.id.generateButton)
+        binding = ActivityNewCharacterBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        binding.run {
+            generateButton.setOnClickListener{
+                characterData = CharacterGenerator.generate()
+                displayCharacterData()
+            }
+        }
+    }
+        private fun displayCharacterData() {
+        characterData.run {
+                binding.nameTextView.text = name
+                binding.raceTextView.text = race
+                binding.dexterityTextView.text = dex
+                binding.wisdomTextView.text = wis
+                binding.strengthTextView.text = str
+        }
     }
 }
