@@ -12,9 +12,15 @@ import android.widget.Button
 import androidx.viewbinding.ViewBinding
 
 private lateinit var binding: ActivityNewCharacterBinding
+private const val CHARACTER_DATA_KEY = "CHARACTER_DATA_KEY"
+
 class NewCharacterActivity : AppCompatActivity() {
     private var characterData = CharacterGenerator.generate()
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(CHARACTER_DATA_KEY, characterData)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,12 +28,17 @@ class NewCharacterActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        characterData = savedInstanceState?.let {
+            it.getSerializable(CHARACTER_DATA_KEY) as CharacterGenerator.CharacterData
+        } ?: CharacterGenerator.generate()
+
         binding.run {
             generateButton.setOnClickListener{
                 characterData = CharacterGenerator.generate()
                 displayCharacterData()
             }
         }
+        displayCharacterData()
     }
         private fun displayCharacterData() {
         characterData.run {
